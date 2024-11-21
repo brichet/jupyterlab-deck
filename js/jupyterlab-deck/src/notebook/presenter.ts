@@ -324,7 +324,7 @@ export class NotebookPresenter implements IPresenter<NotebookPanel> {
       this._commands.addKeyBinding({
         command: CommandIds[direction],
         keys: DIRECTION_KEYS[direction],
-        selector: `.${CSS.deck} .jp-Notebook.jp-mod-commandMode:focus`,
+        selector: `.${CSS.deck} .jp-Notebook.jp-mod-commandMode:not(.jp-mod-readWrite) :focus`,
       });
     }
     for (const [directions, keys] of COMPOUND_KEYS.entries()) {
@@ -333,7 +333,7 @@ export class NotebookPresenter implements IPresenter<NotebookPanel> {
         command: CommandIds.go,
         args: { direction, alternate },
         keys,
-        selector: `.${CSS.deck} .jp-Notebook.jp-mod-commandMode:focus`,
+        selector: `.${CSS.deck} .jp-Notebook.jp-mod-commandMode:not(.jp-mod-readWrite) :focus`,
       });
     }
   }
@@ -522,6 +522,9 @@ export class NotebookPresenter implements IPresenter<NotebookPanel> {
     if (this._manager.layover) {
       this._manager.layover.model.parts = onScreen;
     }
+
+    // Force the focus on the new active cell.
+    notebook.activeCell?.node.focus();
   }
 
   protected _forceStyle() {
